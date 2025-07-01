@@ -113,3 +113,8 @@ env/
 env.bak/
 venv.bak/
 
+# Scrapper and LLM summarizer specific ignores
+chromedriver-linux64/
+google-chrome-stable_current_amd64.deb
+chromedriver-linux64.zip
+
