@@ -7,10 +7,10 @@ load_dotenv()
 # LinkedIn API Configuration
 LINKEDIN_CLIENT_ID = os.getenv('LINKEDIN_CLIENT_ID')
 LINKEDIN_CLIENT_SECRET = os.getenv('LINKEDIN_CLIENT_SECRET')
-LINKEDIN_REDIRECT_URI = os.getenv('LINKEDIN_REDIRECT_URI', 'http://localhost:8501')
+LINKEDIN_REDIRECT_URI = 'http://52.20.1.111'
 
 # FastAPI Configuration
-FASTAPI_URL = os.getenv('FASTAPI_URL', 'http://35.223.214.177')
+FASTAPI_URL = os.getenv('FASTAPI_URL', 'localhost')
 
 def validate_config():
     """Validate that all required configuration is present"""
@@ -21,5 +21,5 @@ def validate_config():
         missing.append('LINKEDIN_CLIENT_SECRET')
     if missing:
         raise ValueError(f"Missing required configuration: {', '.join(missing)}")
-    return True
+        return True
 

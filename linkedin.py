@@ -33,7 +33,11 @@ class LinkedInAuth:
             'client_secret': self.client_secret
         }
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        print(f"DEBUG: Token exchange request data: {data}")
+        print(f"DEBUG: Token exchange request headers: {headers}")
         response = requests.post(self.token_url, data=data)
+        print(f"DEBUG: Token exchange response status: {response.status_code}")
+        print(f"DEBUG: Token exchange response text: {response.text}")
         if not response.ok:
             st.error(response.text)
         response.raise_for_status()
@@ -72,10 +76,13 @@ def initialize_linkedin_auth():
     return LinkedInAuth()
 
 def handle_linkedin_callback():
+    print("DEBUG: handle_linkedin_callback called.")
     query_params = st.query_params
+    print(f"DEBUG: st.query_params: {query_params}")
     st.write("🔁 LinkedIn Redirect Response:", query_params)
     if 'code' in query_params and 'state' in query_params:
         code, state = query_params['code'][0], query_params['state'][0]
+        st.query_params = {}
         linkedin_auth = initialize_linkedin_auth()
         try:
             token = linkedin_auth.exchange_code_for_token(code, state)
@@ -83,7 +90,6 @@ def handle_linkedin_callback():
             profile = linkedin_auth.get_user_profile(token)
             st.session_state['linkedin_profile'] = profile
             st.session_state['linkedin_person_urn'] = f"urn:li:person:{profile['id']}"
-            st.experimental_set_query_params()
             st.success("✅ LinkedIn connected.")
             st.rerun()
         except Exception as e:
@@ -95,4 +101,6 @@ def post_to_linkedin(content, access_token, person_urn):
         result = linkedin_auth.create_post(access_token, content, person_urn)
         return True, result
     except Exception as e:
+        print(f"DEBUG: Error in post_to_linkedin: {e}")
+        print("This is an exception in the code")
         return False, str(e)
